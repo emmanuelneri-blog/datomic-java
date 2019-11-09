@@ -27,7 +27,11 @@ public class Application {
         product.setDescription("Product description");
         productRepository.save(product);
 
+        productRepository.save(new Product("2222", "Product 2", "Product 2"));
+        productRepository.save(new Product("3333", "Product 3", "Product 3"));
+
         final List<Product> products = productRepository.list();
-        System.out.println(products);
+        System.out.println("--------- All Products ---------");
+        products.forEach(System.out::println);
     }
 }

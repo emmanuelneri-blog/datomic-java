@@ -6,7 +6,11 @@ import datomic.Peer;
 import datomic.Util;
 import lombok.AllArgsConstructor;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.Objects;
+import java.util.concurrent.ExecutionException;
 import java.util.stream.Collectors;
 
 @AllArgsConstructor
@@ -15,13 +19,18 @@ public class ProductRepository {
     private final Connection connection;
 
     public void save(final Product product) {
-        this.connection.transact(Util.list(
-                Util.map(
-                        ":product/code", product.getCode(),
-                        ":product/name", product.getName(),
-                        ":product/description", product.getDescription()
-                )
-        ));
+        try {
+            final Map map = this.connection.transact(Util.list(
+                    Util.map(
+                            ":product/code", product.getCode(),
+                            ":product/name", product.getName(),
+                            ":product/description", Objects.isNull(product.getDescription()) ? "" : product.getDescription()
+                    )
+            )).get();
+            System.out.println(map);
+        } catch (InterruptedException | ExecutionException e) {
+            e.printStackTrace();
+        }
     }
 
     public List<Product> list() {
@@ -39,7 +48,10 @@ public class ProductRepository {
     }
 
     private Product toProduct(final List<Object> fields) {
-        return new Product((String) fields.get(0), (String) fields.get(1), (String) fields.get(2));
+        final String code = (String) fields.get(0);
+        final String name = (String) fields.get(1);
+        final String description = (String) fields.get(2);
+        return new Product(code, name, description);
     }
 
 }
