@@ -2,10 +2,16 @@
 {:db/ident :product/code
   :db/valueType :db.type/string
   :db/cardinality :db.cardinality/one
+  :db/unique :db.unique/identity
   :db/doc "product code"}
 
 {:db/ident :product/name
   :db/valueType :db.type/string
   :db/cardinality :db.cardinality/one
   :db/doc "product name"}
+
+{:db/ident :product/description
+  :db/valueType :db.type/string
+  :db/cardinality :db.cardinality/one
+  :db/doc "product description"}
 ]

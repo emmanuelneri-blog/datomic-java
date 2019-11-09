@@ -18,22 +18,28 @@ public class ProductRepository {
         this.connection.transact(Util.list(
                 Util.map(
                         ":product/code", product.getCode(),
-                        ":product/name", product.getName()
+                        ":product/name", product.getName(),
+                        ":product/description", product.getDescription()
                 )
         ));
     }
 
     public List<Product> list() {
         return Peer.q(
-                "[:find ?code ?name" +
+                "[:find ?code ?name ?description" +
                         " :where " +
                         "   [?product :product/code ?code]" +
                         "   [?product :product/name ?name]" +
+                        "   [?product :product/description ?description]" +
                         "]",
                 this.connection.db())
                 .stream()
-                .map(fields -> new Product((String) fields.get(0), (String) fields.get(1)))
+                .map(this::toProduct)
                 .collect(Collectors.toList());
+    }
+
+    private Product toProduct(final List<Object> fields) {
+        return new Product((String) fields.get(0), (String) fields.get(1), (String) fields.get(2));
     }
 
 }

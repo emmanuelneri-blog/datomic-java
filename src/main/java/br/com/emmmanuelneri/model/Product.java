@@ -15,4 +15,8 @@ public class Product {
     @Getter
     @Setter
     private String name;
+
+    @Getter
+    @Setter
+    private String description;
 }

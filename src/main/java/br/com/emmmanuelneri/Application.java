@@ -18,10 +18,13 @@ public class Application {
 
         final ProductRepository productRepository = new ProductRepository(connection);
 
-        final Product product = new Product("123", "Product");
+        final Product product = new Product("123", "Product", null);
         productRepository.save(product);
 
         product.setName("Product Updated");
+        productRepository.save(product);
+
+        product.setDescription("Product description");
         productRepository.save(product);
 
         final List<Product> products = productRepository.list();
